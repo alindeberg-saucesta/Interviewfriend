@@ -30,7 +30,7 @@ if not app.logger.handlers:
 app.logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
 
 # ——— CORS ———
-CORS(app)
+CORS(app, resources={r"/chat": {"origins": "http://localhost:3000"}})
 app.logger.info("CORS configured for /chat")
 
 # ——— Default system prompts ———
@@ -130,7 +130,7 @@ def chat():
 
         # Stream completion from local NIM
         stream = nim_client.chat.completions.create(
-            model="meta/llama-3.1-8b-instruct",
+            model="meta/llama3-8b-instruct",
             messages=msgs,
             temperature=0.2,
             top_p=0.7,
@@ -147,4 +147,4 @@ def chat():
 
 if __name__ == "__main__":
     app.logger.info("Starting Flask on port 8080")
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    app.run(host="0.0.0.0", port=7070, debug=False)
