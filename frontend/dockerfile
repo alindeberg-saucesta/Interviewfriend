@@ -1,27 +1,38 @@
-# frontend/Dockerfile
-# 1) build stage
-FROM node:18-alpine as builder
+# ---------- Stage 1: Build ----------
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-COPY package*.json ./
+# 1. Copy manifest + TS/Next config up front (caches deps)
+COPY package.json package-lock.json tsconfig.json next.config.js next-env.d.ts ./
+
+# 2. Install all deps
 RUN npm ci
 
+# 3. Copy the rest of your source (including .ts/.tsx)
 COPY . .
+
+# 4. Build the Next.js app
 RUN npm run build
 
-# 2) runtime stage
-FROM node:18-alpine
+# ---------- Stage 2: Production ----------
+FROM node:18-alpine AS runner
 WORKDIR /app
+ENV NODE_ENV=production
 
-# only install production deps
-COPY --from=builder /app/package*.json ./
+# 1. Copy just package manifests and install prod deps
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/package-lock.json ./
 RUN npm ci --production
 
-# copy build output
+# 2. Copy over the built output and public assets
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+
+# 3. Copy Next config and TS config files (some runtime code paths look here)
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/tsconfig.json ./
+COPY --from=builder /app/next-env.d.ts ./
 
+# 4. Expose and start
 EXPOSE 3000
 CMD ["npm", "run", "start"]
