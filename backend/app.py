@@ -30,7 +30,7 @@ if not app.logger.handlers:
 app.logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
 
 # ——— CORS ———
-CORS(app, resources={r"/chat": {"origins": "https://interview-friend.ai-lab1.com"}})
+CORS(app)
 app.logger.info("CORS configured for /chat")
 
 # ——— Default system prompts ———
