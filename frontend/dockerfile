@@ -1,0 +1,27 @@
+# frontend/Dockerfile
+# 1) build stage
+FROM node:18-alpine as builder
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# 2) runtime stage
+FROM node:18-alpine
+WORKDIR /app
+
+# only install production deps
+COPY --from=builder /app/package*.json ./
+RUN npm ci --production
+
+# copy build output
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/tsconfig.json ./
+
+EXPOSE 3000
+CMD ["npm", "run", "start"]
