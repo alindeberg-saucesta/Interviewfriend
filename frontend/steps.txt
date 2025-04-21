@@ -16,3 +16,7 @@ npx create-next-app@latest my-chat-ui \
   --tailwind \
   --import-alias "@/*"
 
+replace created page.tsx with updated file from here
+
+npm install react-markdown remark-gfm react-syntax-highlighter react-hot-toast
+
