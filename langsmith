@@ -2,4 +2,4 @@ LANGSMITH_TRACING=true
 LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
 LANGSMITH_API_KEY="<your-api-key>"
 LANGSMITH_PROJECT="interviewfriendlocal"
-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
+
