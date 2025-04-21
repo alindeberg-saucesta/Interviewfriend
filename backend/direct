@@ -1,0 +1,7 @@
+cd backend
+docker build -t chat-backend:latest .
+docker tag chat-backend:latest \
+  010526249362.dkr.ecr.us-west-2.amazonaws.com/chat-backend:latest
+docker push \
+  010526249362.dkr.ecr.us-west-2.amazonaws.com/chat-backend:latest
+cd ..
