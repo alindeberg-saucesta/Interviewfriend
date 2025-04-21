@@ -1,0 +1,18 @@
+# 1) Authenticate
+docker login nvcr.io \
+    -u '$oauthtoken' \
+    -p '<PASTE_YOUR_API_KEY_HERE>'
+
+# 2) Configure env & cache
+export NGC_API_KEY="<PASTE_YOUR_API_KEY_HERE>"
+export LOCAL_NIM_CACHE="$HOME/.cache/nim"
+mkdir -p "$LOCAL_NIM_CACHE"
+
+# 3) Pull & run
+docker run -it --rm \
+  --gpus all \
+  --shm-size=16GB \
+  -e NGC_API_KEY \
+  -v "$LOCAL_NIM_CACHE:/opt/nim/.cache" \
+  -p 8000:8000 \
+  nvcr.io/nim/google/gemma-2-9b-it:latest
