@@ -1,4 +1,4 @@
-docker build -t chat-frontend:latest .
+docker build --build-arg NEXT_PUBLIC_BACKEND_URL_ARG=${ACTUAL_BACKEND_URL} -t chat-frontend:latest .
 docker tag chat-frontend:latest \
   010526249362.dkr.ecr.us-west-2.amazonaws.com/interviewfriendlocalfront:latest
 docker push \
