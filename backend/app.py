@@ -130,7 +130,7 @@ def chat():
 
         # Stream completion from local NIM
         stream = nim_client.chat.completions.create(
-            model="google/gemma-2-9b-it",
+            model="meta/llama-3.1-8b-instruct",
             messages=msgs,
             temperature=0.2,
             top_p=0.7,
